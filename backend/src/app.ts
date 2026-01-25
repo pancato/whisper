@@ -1,1 +1,26 @@
-console.log("Hello World!");
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/authRoutes";
+import chatRoutes from "./routes/chatRoutes";
+import messageRoutes from "./routes/messageRoutes";
+import userRoutes from "./routes/userRoutes";
+
+const app = express();
+
+// json middleware
+app.use(express.json());
+
+// cors middleware
+app.use(cors());
+
+// health check
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
+});
+
+app.use("/api/auth", authRoutes);
+app.use("/api/chats", chatRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
+
+export default app;
