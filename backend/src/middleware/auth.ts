@@ -11,9 +11,7 @@ export const protectRoute = [
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const { userId: clerkId } = getAuth(req);
-      if (!clerkId) {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
+
       const user = await User.findOne({ clerkId });
       if (!user) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -21,7 +19,8 @@ export const protectRoute = [
       req.userId = user._id.toString();
       next();
     } catch (error) {
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(500);
+      next(error);
     }
   },
 ];
